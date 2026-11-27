@@ -1,11 +1,20 @@
 from cryptography.hazmat.primitives.asymmetric import x25519
 from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
+import os
+
+# Cuz we r gonna use AES256_GCM (32*8=256)
+salt=os.urandom(32)
 
 alice=x25519.X25519PrivateKey.generate()
 alice_public_key=alice.public_key()
 
-print(alice_public_key.public_bytes(encoding=Encoding.Raw,format=PublicFormat.Raw).hex())
+# print(alice_public_key.public_bytes(encoding=Encoding.Raw,format=PublicFormat.Raw).hex())
+public_pairs={
+    "salt":salt.hex(),
+    "public_key":alice_public_key.public_bytes(encoding=Encoding.Raw,format=PublicFormat.Raw).hex()
+}
 
+print(public_pairs)
 print('-'*30)
 
 bob_public_key_hex=input("Enter Bobs Public Key: ")
